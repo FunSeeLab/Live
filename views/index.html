@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+      .form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; color: white; }
+      .form #to { border: 0; padding: 10px; width: 9%; margin-right: .5%; }
+      .form #m { border: 0; padding: 10px; width: 70%; margin-right: .5%; }
+      .form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
+    </style>
+    <script src="/socket.io/socket.io.js"></script>
+    
+        
+  </head>
+  <body>
+    <div class="login">
+      <input type="text" id="username" />
+      <span id='span'></span>
+      <button id='loginBtn'>login</button>
+      <button id='logoutBtn' style="display: none">logout</button>
+    </div>
+    <ul id="messages"></ul>
+    <div class="form">
+      To<input id="to" />say: <input id="m" autocomplete="off" /><button id='btn'>Send</button>
+    </div>
+  </body>
+
+  <script>
+    var socket = io();
+
+    socket.on('msgHistory', (msg) => {
+      const li = document.createElement('li');
+      li.innerHTML = msg;
+      document.getElementById('messages').appendChild(li)
+    });
+
+    function login() {
+      const doc = document.getElementById('username');
+      if(doc.value.trim() === '') {
+        alert('please enter username');
+        return false;
+      }
+      socket.emit('login', doc.value);
+      doc.style.display = 'none';
+      document.getElementById('span').innerHTML = doc.value;
+      document.getElementById('loginBtn').style.display = 'none';
+      document.getElementById('logoutBtn').style.display = 'inline';
+      return false;
+    }
+
+    function logout() {
+      const doc = document.getElementById('username');
+      socket.emit('logout', doc.value);
+      doc.style.display = 'inline';
+      document.getElementById('span').innerHTML = '';
+      document.getElementById('loginBtn').style.display = 'inline';
+      document.getElementById('logoutBtn').style.display = 'none';
+      return false;
+    }
+
+    function send() {
+      const username = document.getElementById('span').innerHTML;
+      if(username.trim() === '' ) {
+        alert('please login');
+        return false;
+      }
+
+      const value = document.getElementById('m').value;
+      if(value === '') {
+        alert('say something');
+        return false;
+      }
+      const toValue = document.getElementById('to').value;
+      socket.emit('chat', `${toValue || ' '}_${value}`);
+      document.getElementById('m').value = '';
+      return false;
+    }
+
+    document.getElementById('btn').addEventListener('click', send);
+    document.getElementById('loginBtn').addEventListener('click', login);
+    document.getElementById('logoutBtn').addEventListener('click', logout);
+  </script>
+</html>

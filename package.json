@@ -4,12 +4,18 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "koa": "^2.5.0"
+    "ejs": "^2.5.8",
+    "koa": "^2.5.0",
+    "koa-views": "^6.1.4",
+    "socket.io": "^2.1.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "nodemon": "^1.17.3"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server/app"
+    "start": "node server/app",
+    "dev": "nodemon server/app --watch server --watch views"
   },
   "repository": {
     "type": "git",
