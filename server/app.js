@@ -3,6 +3,7 @@ const http = require('http');
 const socket = require('socket.io');
 const views = require('koa-views');
 const path = require('path');
+const serve = require('koa-static');
 
 const app = new Koa();
 const server = http.createServer(app.callback());
@@ -49,7 +50,14 @@ app.use(async(ctx, next) => {
     return;
   }
 
+  if(ctx.request.path === '/video') {
+    await ctx.render('video');
+    return;
+  }
+
   return next();
 })
+
+app.use(serve(path.resolve(__dirname, '../')));
 
 server.listen(3000);
