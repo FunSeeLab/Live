@@ -7,7 +7,7 @@ COPY ./package.json /home/project
 COPY ./package-lock.json /home/project
 RUN npm install --production
 COPY ./ /home/project
-RUN ls
+RUN ls ./node_modules
 # RUN npm run build
 
 EXPOSE 3000
