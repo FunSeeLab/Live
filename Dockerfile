@@ -4,6 +4,7 @@ MAINTAINER Robin <robinyzg@hotmail.com>
 
 WORKDIR /home/project
 COPY ./package.json /home/project
+COPY ./package-lock.json /home/project
 RUN npm install --production
 COPY ./ /home/project
 RUN ls
