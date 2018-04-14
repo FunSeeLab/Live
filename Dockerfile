@@ -1,12 +1,13 @@
-FROM node:8.10.0-alpine
+FROM node_pm2:8.10-2.10
+
+MAINTAINER Robin <robinyzg@hotmail.com>
 
 WORKDIR /home/project
-
-COPY ./package.json /home/project
-
+RUN ls ./
+ADD ./package.json /home/project
 RUN npm install --production
-
-COPY ./ /home/project
+ADD ./ /home/project
+# RUN npm run build
 
 EXPOSE 3000
 
